@@ -1,0 +1,70 @@
+@import url('https://api.fontshare.com/v2/css?f=switzer@1,2&display=swap');
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.section {
+  margin-bottom: 100px;
+}
+
+/* Adjust margin-bottom for different screen sizes */
+@media (max-width: 1024px) {
+
+  /* Tablets */
+  .section {
+    margin-bottom: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Mobile devices */
+  .section {
+    margin-bottom: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Small mobile devices */
+  .section {
+    margin-bottom: 40px;
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Typography, Button, Container, Divider, IconButton } from "@mui/material";
+import { Box, Typography, Button, Container, Divider, IconButton, ListItem, ListItemText, List, Paper } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { gsap } from "gsap";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,7 +9,7 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-cards";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import Footer from "../components/Footer/Footer";
-import { SERVER_URL } from "./Constant";
+import { SERVER_Image_URL, SERVER_URL } from "./Constant";
 
 const logos = [
     { id: 1, src: "/images/image 19.png", alt: "Company 1" },
@@ -63,14 +63,18 @@ const Home1 = () => {
     const sectionRef = useRef(null);
 
     const [services, setServices] = useState([]);
+    // const [products, setProducts] = useState([]);
+    const [about, setAbout] = useState([]);
+    const [testimonials, setTestimonials] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const [products, setProducts] = useState([]);
+    const [activeProduct, setActiveProduct] = useState(null);
+    const [clients, setClients] = useState([]);
+    const [activeClient, setActiveClient] = useState(null);
 
-    // useEffect(() => {
-    //     fetch("https://trailcode.online/json/services.php")
-    //         .then((response) => response.json())
-    //         .then((data) => setServices(data))
-    //         .catch((error) => console.error("Error fetching data:", error));
-    // }, []);
+
+    const isMobile = window.innerWidth < 768;
+
 
     useEffect(() => {
         fetch(`${SERVER_URL}/services.php`) // Append the endpoint dynamically
@@ -80,22 +84,42 @@ const Home1 = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`${SERVER_URL}/products.php`) // Append the endpoint dynamically
+        fetch(`${SERVER_URL}/products.php`)
             .then((response) => response.json())
-            .then((data) => setProducts(data))
+            .then((data) => {
+                setProducts(data);
+                if (data.length > 0) setActiveProduct(data[0]);
+            })
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
+    useEffect(() => {
+        fetch(`${SERVER_URL}/about.php`) // Append the endpoint dynamically
+            .then((response) => response.json())
+            .then((data) => setAbout(data))
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
+
+    useEffect(() => {
+        fetch(`${SERVER_URL}/testimonials.php`) // Append the endpoint dynamically
+            .then((response) => response.json())
+            .then((data) => setTestimonials(data))
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
+
+    useEffect(() => {
+        fetch(`${SERVER_URL}/clients.php`)
+            .then((response) => response.json())
+            .then((data) => {
+                setClients(data);
+                if (data.length > 0) setActiveClient(data[0]);
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
+
+    console.log('testimonials ------------- ', testimonials);
 
 
-    // useEffect(() => {
-    //     fetch("https://trailcode.online/json/products.php")
-    //         .then((response) => response.json())
-    //         .then((data) => setProducts(data))
-    //         .catch((error) => console.error("Error fetching data:", error));
-    // }, []);
-
-    // console.log('service ------------ ', services);
 
 
     useEffect(() => {
@@ -294,8 +318,21 @@ const Home1 = () => {
                                 }}
                             >
                                 Strategic Digital
+                                <br />
+                                Solutions for Your
                             </Typography>
 
+                        </Box>
+                        {/* Last Line with Button */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                flexDirection: { xs: "column", md: "row" },
+                                textAlign: { xs: "center", md: "left" },
+                            }}
+                        >
                             <Typography
                                 variant="h2"
                                 sx={{
@@ -305,51 +342,24 @@ const Home1 = () => {
                                     textTransform: "uppercase",
                                 }}
                             >
-                                Solutions for Your
+                                Business
                             </Typography>
 
-                            {/* Last Line with Button */}
                             <Box
+                                variant="contained"
                                 sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: { xs: "center", md: "space-between" },
-                                    flexWrap: "wrap",
-                                    gap: { xs: 2, md: 6 },
+                                    borderRadius: "90px",
+                                    px: { xs: 3, md: 4 },
+                                    py: { xs: 1.5, md: 2 },
+                                    fontSize: { xs: "16px", sm: "20px", md: "28px" },
+                                    fontWeight: "500",
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    backgroundColor: "#fbe8eb",
+                                    textTransform: "uppercase",
                                 }}
                             >
-                                <Typography
-                                    variant="h2"
-                                    sx={{
-                                        fontWeight: "300",
-                                        color: "#4D3F43",
-                                        fontSize: { xs: "28px", sm: "40px", md: "80px" },
-                                        textTransform: "uppercase",
-                                    }}
-                                >
-                                    Business
-                                </Typography>
-
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        borderRadius: "90px",
-                                        px: { xs: 3, md: 4 },
-                                        py: { xs: 1.5, md: 2 },
-                                        fontSize: { xs: "16px", sm: "20px", md: "28px" },
-                                        fontWeight: "500",
-                                        color: "#D71635",
-                                        borderColor: "#D71635",
-                                        backgroundColor: "#fbe8eb",
-                                        textTransform: "uppercase",
-                                        "&:hover": {
-                                            backgroundColor: "#D71635",
-                                            color: "#fff",
-                                        },
-                                    }}
-                                >
-                                    Our Services
-                                </Button>
+                                Our Services
                             </Box>
                         </Box>
 
@@ -419,12 +429,12 @@ const Home1 = () => {
                                             </Box>
 
                                             {/* Service Title */}
-                                            <Typography variant="h6" fontWeight="bold" sx={{ marginTop: "auto", color: "#4D3F43" }}>
+                                            <Typography variant="h5" fontWeight="bold" sx={{ marginTop: "auto", color: "#4D3F43", }}>
                                                 {service.service_name}
                                             </Typography>
 
                                             {/* Service Description */}
-                                            <Typography variant="body2" sx={{ color: "#666", mt: 1 }}>
+                                            <Typography variant="body2" sx={{ color: "#4D3F43", mt: 2, }}>
                                                 {service.service_desc.split("\n").map((line, index) => (
                                                     <span key={index}>
                                                         {line} <br />
@@ -444,39 +454,54 @@ const Home1 = () => {
             <section className="section" style={{ backgroundColor: "#000", borderRadius: "24px", padding: "40px 0" }}>
                 <Container>
                     <Box sx={{ py: { xs: 5, md: 10 }, textAlign: { xs: "center", md: "left" } }}>
-                        <Typography
-                            variant="h2"
-                            sx={{
-                                fontWeight: 500,
-                                color: "#fff",
-                                fontSize: { xs: "32px", md: "80px" },
-                                textTransform: "uppercase",
-                                lineHeight: 1.2
-                            }}
-                        >
-                            Empowering <br /> Digital Growth
-                        </Typography>
+                        {about?.length > 0 && (
+                            <>
+                                {/* <Typography
+                                    variant="h2"
+                                    sx={{
+                                        fontWeight: 500,
+                                        color: "#fff",
+                                        fontSize: { xs: "32px", md: "80px" },
+                                        textTransform: "uppercase",
+                                        lineHeight: 1.2
+                                    }}
+                                >
+                                    Empowering <br /> Digital Growth
+                                </Typography> */}
+                                <Typography
+                                    variant="h2"
+                                    sx={{
+                                        fontWeight: 500,
+                                        color: "#fff",
+                                        fontSize: { xs: "32px", md: "80px" },
+                                        textTransform: "uppercase",
+                                        lineHeight: 1.2
+                                    }}
+                                    component="div"
+                                    dangerouslySetInnerHTML={{ __html: about[0].tc_footer }}
+                                />
 
-                        {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+
+                                {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                             <img
                                 src="images/Rectangle_11.png"
                                 alt="border_bottom"
                                 style={{ width: "100%", maxWidth: "600px" }}
                             />
                         </Box> */}
-                        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                            <Box
-                                sx={{
-                                    width: "100%",
-                                    height: "2px",
-                                    backgroundColor: "#CFC4C9",
-                                }}
-                            />
-                        </Box>
+                                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                                    <Box
+                                        sx={{
+                                            width: "100%",
+                                            height: "2px",
+                                            backgroundColor: "#CFC4C9",
+                                        }}
+                                    />
+                                </Box>
 
 
-                        <Box sx={{ margin: { xs: "0 auto", md: "0 0 0 50%" }, maxWidth: { xs: "100%", md: "50%" } }}>
-                            <Typography
+                                <Box sx={{ margin: { xs: "0 auto", md: "0 0 0 50%" }, maxWidth: { xs: "100%", md: "50%" } }}>
+                                    {/* <Typography
                                 variant="h6"
                                 sx={{
                                     color: "#fff",
@@ -486,16 +511,29 @@ const Home1 = () => {
                                 }}
                             >
                                 <span style={{ color: "red" }}>Trail Code i</span>s a leading, creative, and result-driven digital solutions provider. We integrate branding, style-guide, design, and content to manage and monitor your digital marketing strategy. Strategy is too often the missing link, and our clients get a strategically implemented product with the best usability, user experience, and design. We take a bottom-line approach to each project.
-                            </Typography>
-                        </Box>
+                            </Typography> */}
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            color: "#fff",
+                                            fontSize: { xs: "20px", md: "32px" },
+                                            fontWeight: 500,
+                                            mt: 4
+                                        }}
+                                        component="div"
+                                        dangerouslySetInnerHTML={{ __html: about[0].tc_about }}
+                                    />
+
+                                </Box>
+                            </>
+                        )}
                     </Box>
                 </Container>
             </section>
             {/* Our products section */}
-            <section className="section">
+            {/* <section className="section">
                 <Container>
                     <Box>
-                        {/* Heading */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -520,7 +558,6 @@ const Home1 = () => {
                                 in Action
                             </Typography>
 
-                            {/* Button */}
                             <Box
                                 variant="contained"
                                 sx={{
@@ -540,7 +577,6 @@ const Home1 = () => {
                             </Box>
                         </Box>
 
-                        {/* Product Section */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -551,7 +587,6 @@ const Home1 = () => {
                                 justifyContent: "space-between",
                             }}
                         >
-                            {/* Left Section (Text) */}
                             <Box
                                 sx={{
                                     width: { xs: "100%", md: "50%" }, // Fixed width for larger screens
@@ -559,7 +594,6 @@ const Home1 = () => {
                                     flexShrink: 0, // Prevents shrinking when text is short
                                 }}
                             >
-                                {/* Product List */}
                                 {products.map((product, index) => (
                                     <Box key={index} sx={{ mb: 3 }}>
                                         <Typography
@@ -568,7 +602,7 @@ const Home1 = () => {
                                                 color: product.color,
                                                 fontSize: { xs: "22px", md: "32px" },
                                                 fontWeight: 500,
-                                                maxWidth: "400px", // Fixed width to maintain spacing
+                                                maxWidth: "500px", // Fixed width to maintain spacing
                                                 minWidth: "250px", // Ensures text does not collapse
                                             }}
                                         >
@@ -580,7 +614,7 @@ const Home1 = () => {
                                                 color: product.color,
                                                 fontSize: { xs: "18px", md: "20px" },
                                                 mt: 2,
-                                                maxWidth: "400px", // Keeps width fixed for consistency
+                                                maxWidth: "500px", // Keeps width fixed for consistency
                                                 minWidth: "250px",
                                             }}
                                         >
@@ -591,49 +625,6 @@ const Home1 = () => {
                                         </Box>
                                     </Box>
                                 ))}
-
-                                {/* Buttons */}
-                                {/* <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        flexWrap: "wrap",
-                                        justifyContent: { xs: "center", md: "start" },
-                                        gap: 1,
-                                        mt: 4,
-                                    }}
-                                >
-                                    <Button
-                                        variant="outlined"
-                                        sx={{
-                                            borderRadius: 8,
-                                            px: { xs: 3, md: 4 },
-                                            py: 1.5,
-                                            color: "#D71635",
-                                            borderColor: "#D71635",
-                                            textTransform: "inherit",
-                                        }}
-                                    >
-                                        View All Products
-                                    </Button>
-                                    <Button
-                                        variant="outlined"
-                                        sx={{
-                                            borderRadius: "50%",
-                                            width: { xs: 40, md: 50 },
-                                            height: { xs: 40, md: 50 },
-                                            minWidth: { xs: 40, md: 50 },
-                                            p: 1,
-                                            color: "#D71635",
-                                            borderColor: "#D71635",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                        }}
-                                    >
-                                        <ArrowOutwardIcon sx={{ fontSize: { xs: "20px", md: "28px" } }} />
-                                    </Button>
-                                </Box> */}
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -691,8 +682,6 @@ const Home1 = () => {
                                 </Box>
 
                             </Box>
-
-                            {/* Right Section (Image) */}
                             <Box
                                 sx={{
                                     display: "flex",
@@ -715,9 +704,199 @@ const Home1 = () => {
                         </Box>
                     </Box>
                 </Container>
-            </section>
-            {/* Company view section */}
+            </section> */}
             <section className="section">
+                <Container>
+                    <Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                flexDirection: { xs: "column", md: "row" },
+                                textAlign: { xs: "center", md: "left" },
+                                mt: 2,
+                            }}
+                        >
+                            <Typography
+                                variant="h2"
+                                sx={{
+                                    fontWeight: "300",
+                                    color: "#4D3F43",
+                                    fontSize: { xs: "32px", md: "80px" },
+                                    textTransform: "uppercase",
+                                }}
+                            >
+                                Excellence
+                                <br />
+                                in Action
+                            </Typography>
+
+                            <Box
+                                variant="contained"
+                                sx={{
+                                    borderRadius: "90px",
+                                    px: { xs: 3, md: 4 },
+                                    py: 1.5,
+                                    fontSize: { xs: "18px", md: "28px" },
+                                    fontWeight: "500",
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    backgroundColor: "#fbe8eb",
+                                    textTransform: "uppercase",
+                                    mt: { xs: 2, md: 0 },
+                                }}
+                            >
+                                Our Products
+                            </Box>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: { xs: "column", md: "row" },
+                                alignItems: "center",
+                                gap: { xs: "30px", md: "40px" },
+                                marginTop: "50px",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            {/* Left Section - Product List */}
+                            <Box sx={{ width: { xs: "100%", md: "50%" }, maxWidth: "500px" }}>
+                                {products.map((product) => (
+                                    <Box key={product.id} sx={{ mb: 3, cursor: "pointer" }} onClick={() => setActiveProduct(product)}>
+                                        <Typography
+                                            variant="h2"
+                                            sx={{
+                                                color: activeProduct?.id === product.id ? "#4D3F43" : "#D3CFD0",
+                                                fontSize: { xs: "22px", md: "32px" },
+                                                fontWeight: 500,
+                                            }}
+                                        >
+                                            {product.product_name}
+                                        </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                color: activeProduct?.id === product.id ? "#4D3F43" : "#D3CFD0",
+                                                fontSize: { xs: "18px", md: "20px" }, mt: 2
+                                            }}
+                                        >
+                                            {product.product_desc}
+                                        </Typography>
+                                        <Box sx={{ mt: 3 }}>
+                                            <Divider />
+                                        </Box>
+                                    </Box>
+                                ))}
+                            </Box>
+
+                            {/* Right Section - Product Image */}
+                            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: { xs: "100%", md: "50%" }, maxWidth: "500px", backgroundColor: '#FBE8EB', padding: '20px', borderRadius: '24px' }}>
+                                {activeProduct && (
+                                    <img
+                                        src={`${SERVER_Image_URL}/${activeProduct.product_image}`}
+                                        alt={activeProduct.product_name}
+                                        style={{ width: "100%", maxWidth: "453px", height: "auto" }}
+                                    />
+                                )}
+                            </Box>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                flexWrap: "wrap",
+                                justifyContent: { xs: "center", md: "start" },
+                                gap: 1,
+                                mt: 4,
+                            }}
+                        >
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 8,
+                                    px: { xs: 3, md: 4 },
+                                    py: 1.5,
+                                    fontWeight: "bold",
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    textTransform: "inherit",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                View All Products
+                            </Button>
+
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: "50%",
+                                    width: { xs: 40, md: 50 },
+                                    height: { xs: 40, md: 50 },
+                                    minWidth: { xs: 40, md: 50 },
+                                    p: 1,
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                <ArrowOutwardIcon sx={{ fontSize: { xs: "20px", md: "28px" } }} />
+                            </Button>
+                        </Box>
+                    </Box>
+                </Container>
+            </section>
+            {/* <section className="section">
+                <Container>
+                    <Box display="flex" flexDirection={{ xs: "column", md: "row" }} p={3}>
+                        <Box flex={1}>
+                            <List>
+                                {products.map((product) => (
+                                    <ListItem
+                                        key={product.id}
+                                        button
+                                        selected={activeProduct?.id === product.id}
+                                        onClick={() => setActiveProduct(product)}
+                                    >
+                                        <ListItemText
+                                            primary={<Typography variant="h6">{product.product_name}</Typography>}
+                                            secondary={product.product_desc}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Box>
+                        <Box flex={1} display="flex" justifyContent="center" alignItems="center" p={3}>
+                            {activeProduct && (
+                                <Paper elevation={3}>
+                                    <img
+                                        src={`${SERVER_Image_URL}/${activeProduct.product_image}`}
+                                        alt={activeProduct.product_name}
+                                        style={{ width: "100%", maxWidth: 300, height: "auto" }}
+                                    />
+                                </Paper>
+                            )}
+                        </Box>
+                    </Box>
+                </Container>
+            </section> */}
+            {/* Company view section */}
+            {/* <section className="section">
                 <Container>
                     <Box
                         sx={{
@@ -727,7 +906,6 @@ const Home1 = () => {
                             textAlign: "center",
                         }}
                     >
-                        {/* Title */}
                         <Typography
                             fontSize={{ xs: 28, md: 80 }}
                             fontWeight="500"
@@ -738,7 +916,6 @@ const Home1 = () => {
                             WHO TRUSTS US?
                         </Typography>
 
-                        {/* Logos Grid */}
                         <Box
                             sx={{
                                 display: "grid",
@@ -783,8 +960,6 @@ const Home1 = () => {
                                 </Box>
                             ))}
                         </Box>
-
-                        {/* Buttons */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -802,6 +977,223 @@ const Home1 = () => {
                                     px: { xs: 3, md: 4 },
                                     py: 1.5,
                                     fontWeight: 'bold',
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    textTransform: "inherit",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                Load More
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: "50%",
+                                    width: { xs: 40, md: 50 },
+                                    height: { xs: 40, md: 50 },
+                                    minWidth: { xs: 40, md: 50 },
+                                    p: 1,
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                <ArrowOutwardIcon sx={{ fontSize: { xs: "20px", md: "28px" } }} />
+                            </Button>
+                        </Box>
+                    </Box>
+                </Container>
+            </section> */}
+            {/* <section className="section">
+                <Container>
+                    <Box
+                        sx={{
+                            backgroundColor: "#F1EEEE",
+                            borderRadius: "24px",
+                            padding: { xs: "32px", md: "56px" },
+                            textAlign: "center",
+                        }}
+                    >
+                        <Typography fontSize={{ xs: 28, md: 80 }} fontWeight="500" color="#4D3F43" mb={4}>
+                            WHO TRUSTS US?
+                        </Typography>
+
+                        <Box
+                            sx={{
+                                display: "grid",
+                                gridTemplateColumns: {
+                                    xs: "repeat(2, 1fr)",
+                                    sm: "repeat(3, 1fr)",
+                                    md: "repeat(4, 1fr)",
+                                    lg: "repeat(5, 1fr)",
+                                },
+                                gap: { xs: 2, md: 4 },
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                maxWidth: "1100px",
+                                margin: "0 auto",
+                            }}
+                        >
+                            {clients.map((client) => (
+                                <Box
+                                    key={client.id}
+                                    sx={{
+                                        backgroundColor: activeClient?.id === client.id ? "#FFFFFF" : "#D3D3D3",
+                                        width: "100%",
+                                        maxWidth: { xs: "120px", md: "200px" },
+                                        height: { xs: "90px", md: "120px" },
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        margin: "auto",
+                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() => setActiveClient(client)}
+                                >
+                                    <img
+                                        src={`${SERVER_Image_URL}/${client.client_logo}`}
+                                        alt={client.client_name}
+                                        style={{ maxWidth: "80%", maxHeight: "80%" }}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
+
+                        <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "center", gap: 1, mt: 4 }}>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 8,
+                                    px: { xs: 3, md: 4 },
+                                    py: 1.5,
+                                    fontWeight: "bold",
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    textTransform: "inherit",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                Load More
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: "50%",
+                                    width: { xs: 40, md: 50 },
+                                    height: { xs: 40, md: 50 },
+                                    minWidth: { xs: 40, md: 50 },
+                                    p: 1,
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                        borderColor: "#D71635",
+                                    },
+                                }}
+                            >
+                                <ArrowOutwardIcon sx={{ fontSize: { xs: "20px", md: "28px" } }} />
+                            </Button>
+                        </Box>
+                    </Box>
+                </Container>
+            </section> */}
+            <section className="section">
+                <Container>
+                    <Box
+                        sx={{
+                            backgroundColor: "#F1EEEE",
+                            borderRadius: "24px",
+                            padding: { xs: "32px", md: "56px" },
+                            textAlign: "center",
+                        }}
+                    >
+                        <Typography fontSize={{ xs: 28, md: 80 }} fontWeight="500" color="#4D3F43" mb={4}>
+                            WHO TRUSTS US?
+                        </Typography>
+
+                        <Box
+                            sx={{
+                                display: "grid",
+                                gridTemplateColumns: {
+                                    xs: "repeat(2, 1fr)",
+                                    sm: "repeat(3, 1fr)",
+                                    md: "repeat(4, 1fr)",
+                                    lg: "repeat(5, 1fr)",
+                                },
+                                gap: { xs: 2, md: 4 },
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                                maxWidth: "1100px",
+                                margin: "0 auto",
+                            }}
+                        >
+                            {clients.map((client, index) => (
+                                <Box
+                                    key={client.id}
+                                    sx={{
+                                        backgroundColor: "#FEF9FA",
+                                        width: "100%",
+                                        maxWidth: { xs: "120px", md: "200px" },
+                                        height: { xs: "90px", md: "120px" },
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        margin: "auto",
+                                        // boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                        cursor: "pointer",
+                                        transition: "all 0.3s ease-in-out",
+                                        filter: activeClient?.id === client.id || index === 0 ? "none" : "grayscale(100%)",
+                                        "&:hover": {
+                                            filter: "none", // Remove grayscale on hover
+                                        },
+                                    }}
+                                    onClick={() => setActiveClient(client)}
+                                >
+                                    <img
+                                        src={`${SERVER_Image_URL}/${client.client_logo}`}
+                                        alt={client.client_name}
+                                        style={{ maxWidth: "80%", maxHeight: "80%" }}
+                                    />
+                                </Box>
+                            ))}
+                        </Box>
+
+                        <Box sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "center", gap: 1, mt: 4 }}>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 8,
+                                    px: { xs: 3, md: 4 },
+                                    py: 1.5,
+                                    fontWeight: "bold",
                                     color: "#D71635",
                                     borderColor: "#D71635",
                                     textTransform: "inherit",
@@ -861,7 +1253,7 @@ const Home1 = () => {
                                 sx={{
                                     fontWeight: "500",
                                     color: "#4D3F43",
-                                    fontSize: { xs: "28px", md: "80px" }, // Smaller font on mobile
+                                    fontSize: { xs: "28px", md: "80px" },
                                     textAlign: { xs: "center", md: "left" },
                                     textTransform: "uppercase",
                                 }}
@@ -870,96 +1262,98 @@ const Home1 = () => {
                             </Typography>
 
                             {/* Swiper Section */}
-                            <Box sx={{ width: "100%", maxWidth: "400px", mx: "auto" }}> {/* Ensures proper centering */}
+                            <Box sx={{ width: "100%", maxWidth: "400px", mx: "auto" }}>
                                 <Swiper
-                                    slidesPerView={1} // Ensures one slide per view
-                                    spaceBetween={10}
-                                    loop={true} // Enables looping
-                                    autoplay={{ delay: 3000 }} // Auto-slide every 3s
-                                    navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
-                                    pagination={{ clickable: true }}
-                                    modules={[Navigation, Pagination, Autoplay]}
-                                    style={{ width: "100%" }}
+                                    effect="cards"
+                                    grabCursor={true}
+                                    loop={true}
+                                    navigation={{
+                                        nextEl: ".swiper-button-next",
+                                        prevEl: ".swiper-button-prev",
+                                    }}
+                                    initialSlide={1} // Show the second slide first
+                                    modules={[EffectCards, Navigation]}
+                                    className="testimonial-swiper"
                                 >
                                     {testimonials.map((testimonial) => (
                                         <SwiperSlide key={testimonial.id}>
                                             <Box
                                                 sx={{
-                                                    backgroundColor: "#fff",
-                                                    padding: { xs: 2, md: 3 },
-                                                    borderRadius: 5,
+                                                    backgroundColor: "#FDF7F8",
+                                                    padding: { xs: 3, md: 4 },
+                                                    borderRadius: 3,
                                                     border: "1px solid #E0E0E0",
-                                                    minHeight: "300px", // Adjust height for mobile
+                                                    minHeight: "300px",
+                                                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     justifyContent: "space-between",
                                                     textAlign: "center",
-                                                    maxWidth: "90%", // Prevents overflow
+                                                    maxWidth: "90%",
                                                     mx: "auto",
                                                 }}
                                             >
                                                 {/* Feedback Text */}
-                                                <Typography variant="body2" sx={{ color: "#666", fontSize: { xs: "14px", md: "16px" } }}>
-                                                    {testimonial.feedback}
-                                                </Typography>
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{ color: "#666", fontSize: { xs: "14px", md: "16px" } }}
+                                                    component="div"
+                                                    dangerouslySetInnerHTML={{ __html: testimonial.client_comment }}
+                                                />
 
-                                                {/* Client Name in Footer */}
+                                                {/* Client Name */}
                                                 <Typography
                                                     variant="h6"
                                                     fontWeight="bold"
                                                     sx={{ color: "#4D3F43", mt: 2, fontSize: { xs: "16px", md: "18px" } }}
                                                 >
-                                                    {testimonial.name}
+                                                    {testimonial.client_name}
                                                 </Typography>
                                             </Box>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
 
-                                {/* Custom Navigation Buttons */}
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        gap: 2,
-                                        mt: 3,
-                                    }}
-                                >
-                                    <IconButton
-                                        className="swiper-button-prev"
-                                        sx={{
-                                            border: "1px solid #D71635",
-                                            color: "#D71635",
-                                            width: { xs: "35px", md: "50px" }, // Smaller buttons on mobile
-                                            height: { xs: "35px", md: "50px" },
-                                            transition: "all 0.3s ease-in-out",
-                                            "&:hover": {
-                                                backgroundColor: "#D71635",
-                                                color: "#fff",
-                                                borderColor: "#D71635",
-                                            },
-                                        }}
-                                    >
-                                        <ArrowBack />
-                                    </IconButton>
-                                    <IconButton
-                                        className="swiper-button-next"
-                                        sx={{
-                                            border: "1px solid #D71635",
-                                            color: "#D71635",
-                                            width: { xs: "35px", md: "50px" },
-                                            height: { xs: "35px", md: "50px" },
-                                            transition: "all 0.3s ease-in-out",
-                                            "&:hover": {
-                                                backgroundColor: "#D71635",
-                                                color: "#fff",
-                                                borderColor: "#D71635",
-                                            },
-                                        }}
-                                    >
-                                        <ArrowForward />
-                                    </IconButton>
-                                </Box>
+
+                                {/* Custom Navigation Buttons for Non-Mobile Screens */}
+                                {!isMobile && (
+                                    <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+                                        <IconButton
+                                            className="swiper-button-prev"
+                                            sx={{
+                                                border: "1px solid #D71635",
+                                                color: "#D71635",
+                                                width: { xs: "35px", md: "50px" },
+                                                height: { xs: "35px", md: "50px" },
+                                                transition: "all 0.3s ease-in-out",
+                                                "&:hover": {
+                                                    backgroundColor: "#D71635",
+                                                    color: "#fff",
+                                                    borderColor: "#D71635",
+                                                },
+                                            }}
+                                        >
+                                            <ArrowBack />
+                                        </IconButton>
+                                        <IconButton
+                                            className="swiper-button-next"
+                                            sx={{
+                                                border: "1px solid #D71635",
+                                                color: "#D71635",
+                                                width: { xs: "35px", md: "50px" },
+                                                height: { xs: "35px", md: "50px" },
+                                                transition: "all 0.3s ease-in-out",
+                                                "&:hover": {
+                                                    backgroundColor: "#D71635",
+                                                    color: "#fff",
+                                                    borderColor: "#D71635",
+                                                },
+                                            }}
+                                        >
+                                            <ArrowForward />
+                                        </IconButton>
+                                    </Box>
+                                )}
                             </Box>
                         </Box>
                     </Box>
@@ -1063,7 +1457,7 @@ const Home1 = () => {
                                     variant="caption"
                                     sx={{
                                         fontWeight: "400",
-                                        color: "#fff",
+                                        color: "#B69AA1",
                                         fontSize: { xs: "10px", md: "12px" },
                                         textAlign: { xs: "center", md: "left" },
                                         mt: 2

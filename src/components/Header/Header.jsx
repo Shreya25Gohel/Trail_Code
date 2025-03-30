@@ -24,9 +24,9 @@ const Header = () => {
                     left: 0,
                     right: 0,
                     py: 1,
-                    px: { xs: 2, md: 3 }, // Adjust padding for mobile
-                    maxWidth: { md: "22%" }, // Limits width on medium & large screens
-                    mx: { md: "auto" },
+                    px: { xs: 2, md: 0, lg: 3 }, // Adjust padding for mobile
+                    maxWidth: { xs: "100%", sm: "56%", md: "38%", lg: '30%', xl: '24%' }, // Limits width on medium & large screens
+                    mx: "auto",
                 }}
             >
                 <Box
@@ -34,13 +34,18 @@ const Header = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: 'center',
-                        gap: { xs: '18px', md: '32px' },
+                        gap: { xs: '18px', md: '25px', lg: '32px' },
                         // justifyContent: "space-evenly",
                         width: "100%",
                     }}
                 >
                     {/* Logo */}
-                    <img src="/images/TrailCode_logo_white.png" alt="Trail Code" style={{ height: '30px' }} />
+                    <img src="/images/TrailCode_logo_white.png" alt="Trail Code" style={{
+                        height: '30px',
+                        borderRight: '2px solid #DFD8DB',
+                        paddingRight: '20px',
+                        paddingLeft: '8px'
+                    }} />
 
                     {/* Navigation */}
                     <Typography
@@ -52,10 +57,12 @@ const Header = () => {
                             alignItems: "center",
                             gap: { xs: '18px', md: '32px' },
                             justifyContent: 'center',
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            borderRight: '2px solid #DFD8DB',
+                            paddingRight: '20px'
                         }}
                     >
-                        <span style={{ color: "#DFD8DB " }}>|</span> Home <span style={{ color: "#DFD8DB " }}>|</span>
+                        Testimonial
                     </Typography>
 
                     {/* Menu Button */}

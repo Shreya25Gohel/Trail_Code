@@ -117,11 +117,6 @@ const Home1 = () => {
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
-    console.log('testimonials ------------- ', testimonials);
-
-
-
-
     useEffect(() => {
         gsap.from(sectionRef.current, {
             opacity: 0,
@@ -135,10 +130,9 @@ const Home1 = () => {
         <>
 
             {/* Hero Section */}
-            <section className="section">
+            {/* <section className="section">
                 <Container>
                     <Box sx={{ paddingTop: "20px" }}>
-                        {/* First Line */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -170,8 +164,6 @@ const Home1 = () => {
                                 }}
                             />
                         </Box>
-
-                        {/* Second Line */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -204,8 +196,6 @@ const Home1 = () => {
                                 }}
                             />
                         </Box>
-
-                        {/* Third Line */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -226,8 +216,6 @@ const Home1 = () => {
                                 EXPECTATIONS
                             </Typography>
                         </Box>
-
-                        {/* Buttons */}
                         <Box
                             sx={{
                                 display: "flex",
@@ -279,6 +267,155 @@ const Home1 = () => {
                                 <ArrowOutwardIcon />
                             </Button>
                         </Box>
+                        <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    height: "2px",
+                                    backgroundColor: "#CFC4C9",
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                </Container>
+            </section> */}
+            <section className="section">
+                <Container>
+                    <Box sx={{ pt: 3, px: { xs: 2, sm: 4, md: 6 } }}>
+                        {/* First Line */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexWrap: "wrap",
+                                gap: { xs: 2, md: 4 },
+                                textAlign: "center",
+                            }}
+                        >
+                            <Typography
+                                variant="h2"
+                                sx={{
+                                    fontWeight: 300,
+                                    color: "#4D3F43",
+                                    fontSize: { xs: "40px", sm: "80px", md: "120px" },
+                                    textAlign: "center",
+                                }}
+                            >
+                                GO <span style={{ fontWeight: 600 }}>BEYOND</span>
+                            </Typography>
+                            <Box
+                                component="img"
+                                src="images/hero_1.png"
+                                alt="Office Interior"
+                                sx={{
+                                    width: { xs: 80, sm: 120, md: 160 },
+                                    height: "auto",
+                                    borderRadius: 2,
+                                }}
+                            />
+                        </Box>
+
+                        {/* Second Line */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: { xs: "column", sm: "row" },
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: { xs: 2, md: 4 },
+                                mt: 3,
+                                textAlign: "center",
+                            }}
+                        >
+                            <Typography
+                                variant="h3"
+                                sx={{
+                                    fontWeight: "medium",
+                                    color: "#4D3F43",
+                                    fontSize: { xs: "32px", sm: "80px", md: "120px" },
+                                }}
+                            >
+                                YOUR
+                            </Typography>
+                            <Box
+                                component="img"
+                                src="images/hero_2.png"
+                                alt="Workspace"
+                                sx={{
+                                    width: { xs: "80%", sm: "50%", md: "40%" },
+                                    maxWidth: 452,
+                                    height: "auto",
+                                    borderRadius: 2,
+                                }}
+                            />
+                        </Box>
+
+                        {/* Third Line */}
+                        <Box sx={{ textAlign: "center", mt: 3 }}>
+                            <Typography
+                                variant="h2"
+                                sx={{
+                                    fontWeight: "bold",
+                                    color: "#D71635",
+                                    fontSize: { xs: "34px", sm: "80px", md: "105px", lg: "120px" },
+                                }}
+                            >
+                                EXPECTATIONS
+                            </Typography>
+                        </Box>
+
+                        {/* Buttons */}
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexWrap: "wrap",
+                                gap: 2,
+                                mt: 4,
+                            }}
+                        >
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: 8,
+                                    px: { xs: 3, sm: 4, md: 6 },
+                                    py: 1.5,
+                                    color: "#D71635",
+                                    fontWeight: "bold",
+                                    borderColor: "#D71635",
+                                    textTransform: "inherit",
+                                    fontSize: { xs: "14px", md: "18px" },
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                    },
+                                }}
+                            >
+                                Let’s Connect
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderRadius: "50%",
+                                    width: { xs: 40, sm: 48, md: 56 },
+                                    height: { xs: 40, sm: 48, md: 56 },
+                                    minWidth: { xs: 40, sm: 48, md: 56 },
+                                    p: 1,
+                                    color: "#D71635",
+                                    borderColor: "#D71635",
+                                    transition: "all 0.3s ease-in-out",
+                                    "&:hover": {
+                                        backgroundColor: "#D71635",
+                                        color: "#fff",
+                                    },
+                                }}
+                            >
+                                <ArrowOutwardIcon sx={{ fontSize: { xs: "18px", md: "24px" } }} />
+                            </Button>
+                        </Box>
 
                         {/* Divider */}
                         <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
@@ -293,6 +430,7 @@ const Home1 = () => {
                     </Box>
                 </Container>
             </section>
+
 
             {/* Our Services Section */}
             <section className="section">

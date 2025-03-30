@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { Box, Typography, Button, Container, Divider, IconButton, ListItem, ListItemText, List, Paper } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards, Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -10,6 +11,9 @@ import "swiper/css/effect-cards";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import Footer from "../components/Footer/Footer";
 import { SERVER_Image_URL, SERVER_URL } from "./Constant";
+import DOMPurify from "dompurify";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const logos = [
     { id: 1, src: "/images/image 19.png", alt: "Company 1" },
@@ -61,6 +65,7 @@ const testimonials = [
 const Home1 = () => {
 
     const sectionRef = useRef(null);
+    const textRef = useRef(null);
 
     const [services, setServices] = useState([]);
     // const [products, setProducts] = useState([]);
@@ -71,6 +76,7 @@ const Home1 = () => {
     const [activeProduct, setActiveProduct] = useState(null);
     const [clients, setClients] = useState([]);
     const [activeClient, setActiveClient] = useState(null);
+    const imageRef = useRef(null);
 
 
     const isMobile = window.innerWidth < 768;
@@ -126,159 +132,110 @@ const Home1 = () => {
         });
     }, []);
 
+    useEffect(() => {
+        products.forEach((product, index) => {
+            gsap.to(imageRef.current, {
+                backgroundImage: `url(${SERVER_Image_URL}/${product.product_image})`,
+                scrollTrigger: {
+                    trigger: `#product-${product.id}`,
+                    start: "top 60%",
+                    end: "top 20%",
+                    scrub: true,
+                    onEnter: () => setActiveProduct(product), // When scrolling down
+                    onLeaveBack: () => {
+                        // Get the previous product
+                        if (index > 0) {
+                            setActiveProduct(products[index - 1]); // When scrolling up
+                        }
+                    },
+                },
+            });
+        });
+    }, [products, SERVER_Image_URL]);
+
+    // useEffect(() => {
+    //     if (textRef.current) {
+    //         gsap.to(textRef.current, {
+    //             color: "#ff0000", // Change to red on scroll
+    //             scrollTrigger: {
+    //                 trigger: textRef.current,
+    //                 start: "top 60%", // When 80% of the text is in view
+    //                 end: "center", // Stop animating at 30%
+    //                 scrub: true, // Smooth transition effect
+    //             },
+    //         });
+    //     }
+    // }, [about]);
+
+    useLayoutEffect(() => {
+        if (textRef.current) {
+            const lines = textRef.current.querySelectorAll(".line");
+
+            lines.forEach((line, index) => {
+                gsap.fromTo(
+                    line,
+                    { color: "#fff" }, // Start color (white)
+                    {
+                        color: "#ff0000", // End color (red)
+                        scrollTrigger: {
+                            trigger: line,
+                            start: "top 65%",
+                            end: "center",
+                            scrub: true,
+                        },
+                    }
+                );
+            });
+        }
+    }, [about]);
+
+    // Function to split the paragraph into individual lines
+    // const splitParagraphIntoLines = (text) => {
+    //     if (!text) return "";
+
+    //     const words = text.split(" ");
+    //     const wordsPerLine = 10; // Adjust line length based on words
+
+    //     const lines = [];
+    //     for (let i = 0; i < words.length; i += wordsPerLine) {
+    //         const line = words.slice(i, i + wordsPerLine).join(" ");
+    //         lines.push(line);
+    //     }
+
+    //     return lines.map((line, index) => (
+    //         <div key={index} className="line" style={{ marginBottom: "10px" }}>
+    //             {line}
+    //         </div>
+    //     ));
+    // };
+
+    // Function to split HTML text into individual lines without <br> tags
+    const splitHtmlIntoLines = (html, wordsPerLine = 10) => {
+        if (!html) return [];
+
+        // Sanitize and extract plain text from HTML
+        const plainText = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] }).replace(/\s+/g, " ").trim();
+        const words = plainText.split(" ");
+
+        const lines = [];
+        for (let i = 0; i < words.length; i += wordsPerLine) {
+            lines.push(words.slice(i, i + wordsPerLine).join(" "));
+        }
+
+        return lines.map((line, index) => (
+            <div
+                key={index}
+                className="line"
+                style={{ marginBottom: "10px" }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(line) }}
+            />
+        ));
+    };
+
     return (
         <>
 
             {/* Hero Section */}
-            {/* <section className="section">
-                <Container>
-                    <Box sx={{ paddingTop: "20px" }}>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                flexWrap: "wrap", // Ensures proper wrapping on smaller screens
-                            }}
-                        >
-                            <Typography
-                                variant="h2"
-                                sx={{
-                                    fontWeight: "300",
-                                    color: "#4D3F43",
-                                    fontSize: { xs: "32px", sm: "60px", md: "160px" },
-                                    textAlign: { xs: "center", md: "left" }, // Center align on small screens
-                                    width: { xs: "100%", md: "auto" }, // Full width on mobile
-                                }}
-                            >
-                                GO <span style={{ color: "#4D3F43", fontWeight: "600" }}>BEYOND</span>
-                            </Typography>
-                            <Box
-                                component="img"
-                                src="images/hero_1.png"
-                                alt="Office Interior"
-                                sx={{
-                                    width: { xs: 80, sm: 120, md: 160 },
-                                    height: { xs: 60, sm: 100, md: 160 },
-                                    borderRadius: 2,
-                                }}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: { xs: "20px", md: "40px" },
-                                flexWrap: "wrap",
-                                mt: 2,
-                            }}
-                        >
-                            <Typography
-                                variant="h3"
-                                sx={{
-                                    fontWeight: "medium",
-                                    color: "#4D3F43",
-                                    fontSize: { xs: "28px", sm: "60px", md: "160px" },
-                                    textAlign: "center",
-                                }}
-                            >
-                                YOUR
-                            </Typography>
-                            <Box
-                                component="img"
-                                src="images/hero_2.png"
-                                alt="Workspace"
-                                sx={{
-                                    width: { xs: 80, sm: 200, md: 452 },
-                                    height: { xs: 80, sm: 150, md: 210 },
-                                    borderRadius: 2,
-                                }}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                textAlign: "center",
-                                mt: 2,
-                            }}
-                        >
-                            <Typography
-                                variant="h2"
-                                sx={{
-                                    fontWeight: "bold",
-                                    color: "#D71635",
-                                    fontSize: { xs: "32px", sm: "60px", md: "160px" },
-                                }}
-                            >
-                                EXPECTATIONS
-                            </Typography>
-                        </Box>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                mt: 3,
-                                flexWrap: "wrap",
-                                justifyContent: "center",
-                                gap: 2,
-                            }}
-                        >
-                            <Button
-                                variant="outlined"
-                                sx={{
-                                    borderRadius: 8,
-                                    px: { xs: 2, sm: 3, md: 4 },
-                                    py: 1,
-                                    color: "#D71635",
-                                    fontWeight: "bold",
-                                    borderColor: "#D71635",
-                                    textTransform: "inherit",
-                                    transition: "all 0.3s ease-in-out",
-                                    "&:hover": {
-                                        backgroundColor: "#D71635",
-                                        color: "#fff",
-                                        borderColor: "#D71635",
-                                    },
-                                }}
-                            >
-                                Let’s Connect
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                sx={{
-                                    borderRadius: "50%",
-                                    width: { xs: 36, sm: 40, md: 50 },
-                                    height: { xs: 36, sm: 40, md: 50 },
-                                    minWidth: { xs: 36, sm: 40, md: 50 },
-                                    p: 1,
-                                    color: "#D71635",
-                                    borderColor: "#D71635",
-                                    transition: "all 0.3s ease-in-out",
-                                    "&:hover": {
-                                        backgroundColor: "#D71635",
-                                        color: "#fff",
-                                        borderColor: "#D71635",
-                                    },
-                                }}
-                            >
-                                <ArrowOutwardIcon />
-                            </Button>
-                        </Box>
-                        <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
-                            <Box
-                                sx={{
-                                    width: "100%",
-                                    height: "2px",
-                                    backgroundColor: "#CFC4C9",
-                                }}
-                            />
-                        </Box>
-                    </Box>
-                </Container>
-            </section> */}
             <section className="section">
                 <Container>
                     <Box sx={{ pt: 3, px: { xs: 2, sm: 4, md: 6 } }}>
@@ -589,12 +546,12 @@ const Home1 = () => {
             </section>
 
             {/* Digital growth section */}
-            <section className="section" style={{ backgroundColor: "#000", borderRadius: "24px", padding: "40px 0" }}>
+            {/* <section className="section" style={{ backgroundColor: "#000", borderRadius: "24px", padding: "40px 0" }}>
                 <Container>
                     <Box sx={{ py: { xs: 5, md: 10 }, textAlign: { xs: "center", md: "left" } }}>
                         {about?.length > 0 && (
                             <>
-                                {/* <Typography
+                                <Typography
                                     variant="h2"
                                     sx={{
                                         fontWeight: 500,
@@ -603,9 +560,45 @@ const Home1 = () => {
                                         textTransform: "uppercase",
                                         lineHeight: 1.2
                                     }}
-                                >
-                                    Empowering <br /> Digital Growth
-                                </Typography> */}
+                                    component="div"
+                                    dangerouslySetInnerHTML={{ __html: about[0].tc_footer }}
+                                />
+                                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                                    <Box
+                                        sx={{
+                                            width: "100%",
+                                            height: "2px",
+                                            backgroundColor: "#CFC4C9",
+                                        }}
+                                    />
+                                </Box>
+
+
+                                <Box sx={{ margin: { xs: "0 auto", md: "0 0 0 50%" }, maxWidth: { xs: "100%", md: "50%" } }}>
+                                    
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            color: "#fff",
+                                            fontSize: { xs: "20px", md: "32px" },
+                                            fontWeight: 500,
+                                            mt: 4
+                                        }}
+                                        component="div"
+                                        dangerouslySetInnerHTML={{ __html: about[0].tc_about }}
+                                    />
+
+                                </Box>
+                            </>
+                        )}
+                    </Box>
+                </Container>
+            </section> */}
+            <section className="section" style={{ backgroundColor: "#000", borderRadius: "24px", padding: "40px 0" }}>
+                <Container>
+                    <Box sx={{ py: { xs: 5, md: 10 }, textAlign: { xs: "center", md: "left" } }}>
+                        {about?.length > 0 && (
+                            <>
                                 <Typography
                                     variant="h2"
                                     sx={{
@@ -619,14 +612,6 @@ const Home1 = () => {
                                     dangerouslySetInnerHTML={{ __html: about[0].tc_footer }}
                                 />
 
-
-                                {/* <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                            <img
-                                src="images/Rectangle_11.png"
-                                alt="border_bottom"
-                                style={{ width: "100%", maxWidth: "600px" }}
-                            />
-                        </Box> */}
                                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                                     <Box
                                         sx={{
@@ -637,31 +622,19 @@ const Home1 = () => {
                                     />
                                 </Box>
 
-
-                                <Box sx={{ margin: { xs: "0 auto", md: "0 0 0 50%" }, maxWidth: { xs: "100%", md: "50%" } }}>
-                                    {/* <Typography
-                                variant="h6"
-                                sx={{
-                                    color: "#fff",
-                                    fontSize: { xs: "20px", md: "32px" },
-                                    fontWeight: 500,
-                                    mt: 4
-                                }}
-                            >
-                                <span style={{ color: "red" }}>Trail Code i</span>s a leading, creative, and result-driven digital solutions provider. We integrate branding, style-guide, design, and content to manage and monitor your digital marketing strategy. Strategy is too often the missing link, and our clients get a strategically implemented product with the best usability, user experience, and design. We take a bottom-line approach to each project.
-                            </Typography> */}
-                                    <Typography
-                                        variant="h6"
-                                        sx={{
-                                            color: "#fff",
-                                            fontSize: { xs: "20px", md: "32px" },
-                                            fontWeight: 500,
-                                            mt: 4
-                                        }}
-                                        component="div"
-                                        dangerouslySetInnerHTML={{ __html: about[0].tc_about }}
-                                    />
-
+                                {/* Line-by-line animation without <br> tags */}
+                                <Box
+                                    ref={textRef}
+                                    sx={{
+                                        margin: { xs: "0 auto", md: "0 0 0 50%" },
+                                        maxWidth: { xs: "100%", md: "50%" },
+                                        color: "#fff",
+                                        fontSize: { xs: "20px", md: "32px" },
+                                        fontWeight: 500,
+                                        mt: 4
+                                    }}
+                                >
+                                    {splitHtmlIntoLines(about[0]?.tc_about)}
                                 </Box>
                             </>
                         )}
@@ -902,7 +875,12 @@ const Home1 = () => {
                             {/* Left Section - Product List */}
                             <Box sx={{ width: { xs: "100%", md: "50%" }, maxWidth: "500px" }}>
                                 {products.map((product) => (
-                                    <Box key={product.id} sx={{ mb: 3, cursor: "pointer" }} onClick={() => setActiveProduct(product)}>
+                                    <Box
+                                        key={product.id}
+                                        id={`product-${product.id}`}
+                                        sx={{ mb: 3, cursor: "pointer" }}
+                                        onClick={() => setActiveProduct(product)}
+                                    >
                                         <Typography
                                             variant="h2"
                                             sx={{
@@ -917,7 +895,8 @@ const Home1 = () => {
                                             variant="body1"
                                             sx={{
                                                 color: activeProduct?.id === product.id ? "#4D3F43" : "#D3CFD0",
-                                                fontSize: { xs: "18px", md: "20px" }, mt: 2
+                                                fontSize: { xs: "18px", md: "20px" },
+                                                mt: 2
                                             }}
                                         >
                                             {product.product_desc}
@@ -929,13 +908,30 @@ const Home1 = () => {
                                 ))}
                             </Box>
 
-                            {/* Right Section - Product Image */}
-                            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: { xs: "100%", md: "50%" }, maxWidth: "500px", backgroundColor: '#FBE8EB', padding: '20px', borderRadius: '24px' }}>
+                            {/* Right Section - Product Image with Parallax Effect */}
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: { xs: "100%", md: "50%" },
+                                    maxWidth: "500px",
+                                    backgroundColor: "#FBE8EB",
+                                    padding: "20px",
+                                    borderRadius: "24px",
+                                }}
+                            >
                                 {activeProduct && (
                                     <img
                                         src={`${SERVER_Image_URL}/${activeProduct.product_image}`}
                                         alt={activeProduct.product_name}
-                                        style={{ width: "100%", maxWidth: "453px", height: "auto" }}
+                                        style={{
+                                            width: "100%",   // Responsive width
+                                            height: "auto",  // ✅ Keeps aspect ratio
+                                            maxWidth: "453px",
+                                            objectFit: "contain",  // Prevents distortion
+                                            transition: "opacity 0.5s ease-in-out",
+                                        }}
                                     />
                                 )}
                             </Box>
@@ -1547,7 +1543,9 @@ const Home1 = () => {
                                     }}
                                 >
                                     We understand how important it is to build your
-                                </Typography>
+                                </Typography>import {DOMPurify} from 'dompurify';
+                                import {DOMPurify} from 'dompurify';
+
                                 <Typography
                                     variant="h6"
                                     sx={{

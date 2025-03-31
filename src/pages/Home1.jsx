@@ -476,13 +476,13 @@ const Home1 = () => {
                                         <Box
                                             sx={{
                                                 backgroundColor: "#fff",
-                                                // paddingBottom: 2,
+                                                paddingBottom: 1,
                                                 // paddingLeft: 3,
                                                 borderRadius: 5,
                                                 border: "1px solid #E0E0E0",
                                                 height: "450px",
                                                 width: "100%",
-                                                maxWidth: { xs: '285px' , sm: '360px' },
+                                                maxWidth: { xs: '285px' , sm: '345px', md: '335px' , lg: '365px' },
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 justifyContent: "space-between",

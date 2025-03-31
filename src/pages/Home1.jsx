@@ -11,7 +11,7 @@ import "swiper/css/effect-cards";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import Footer from "../components/Footer/Footer";
 import { SERVER_Image_URL, SERVER_URL } from "./Constant";
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -476,13 +476,13 @@ const Home1 = () => {
                                         <Box
                                             sx={{
                                                 backgroundColor: "#fff",
-                                                paddingBottom: 3,
-                                                paddingLeft: 3,
+                                                // paddingBottom: 2,
+                                                // paddingLeft: 3,
                                                 borderRadius: 5,
                                                 border: "1px solid #E0E0E0",
-                                                height: "368px",
+                                                height: "450px",
                                                 width: "100%",
-                                                maxWidth: "357px",
+                                                maxWidth: { xs: '285px' , sm: '360px' },
                                                 display: "flex",
                                                 flexDirection: "column",
                                                 justifyContent: "space-between",
@@ -496,7 +496,7 @@ const Home1 = () => {
                                                 sx={{
                                                     position: "absolute",
                                                     left: 75,
-                                                    top: 38,
+                                                    top: 25,
                                                     display: "flex",
                                                     alignItems: "center",
                                                 }}
@@ -507,7 +507,7 @@ const Home1 = () => {
                                                         background: "#f5d6d9",
                                                         borderRadius: "50%",
                                                         height: 50,
-                                                        width: 50,
+                                                        width: { xs: 80, sm: 50 },
                                                         border: "2px #DFD8DB solid",
                                                         display: "flex",
                                                         alignItems: "center",
@@ -519,17 +519,17 @@ const Home1 = () => {
 
                                                 {/* Line Image */}
                                                 <Box sx={{ flexGrow: 1 }}>
-                                                    <img src="images/Rectangle 28.png" alt="line" />
+                                                    <img src="images/Rectangle 28.png" alt="line" style={{ width: '100%' }}/>
                                                 </Box>
                                             </Box>
 
                                             {/* Service Title */}
-                                            <Typography variant="h5" fontWeight="bold" sx={{ marginTop: "auto", color: "#4D3F43", }}>
+                                            <Typography variant="h5" fontWeight="bold" sx={{ color: "#4D3F43", position: 'absolute', top: '22%', left: '10%' }}>
                                                 {service.service_name}
                                             </Typography>
 
                                             {/* Service Description */}
-                                            <Typography variant="body2" sx={{ color: "#4D3F43", mt: 2, }}>
+                                            <Typography variant="body2" sx={{ color: "#4D3F43", position: 'absolute', top: '32%', left: '10%', right: '6%', fontSize: {xs: '0.775rem', sm: '0.875rem'} }}>
                                                 {service.service_desc.split("\n").map((line, index) => (
                                                     <span key={index}>
                                                         {line} <br />

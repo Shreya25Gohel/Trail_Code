@@ -40,7 +40,7 @@ const Header = () => {
                     }}
                 >
                     {/* Logo */}
-                    <img src="/images/TrailCode_logo_white.png" alt="Trail Code" style={{
+                    <img src="images/TrailCode_logo_white.png" alt="Trail Code" style={{
                         height: '30px',
                         borderRight: '2px solid #DFD8DB',
                         paddingRight: '20px',
@@ -62,7 +62,7 @@ const Header = () => {
                             paddingRight: '20px'
                         }}
                     >
-                        Testimonial
+                        Home
                     </Typography>
 
                     {/* Menu Button */}
